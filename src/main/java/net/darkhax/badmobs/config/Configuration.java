@@ -84,22 +84,17 @@ public class Configuration {
     }
 
     public boolean allowSpawn(Entity entity, MobSpawnType reason) {
-
         final SpawnConfig config = this.configs.get(entity.getType());
 
         if (config == null) {
-
             if (!ForgeRegistries.ENTITY_TYPES.containsValue(entity.getType())) {
-
-                BadMobs.LOG.error("The entity type {} of {} spawned but has not been registered. This is not allowed. SpawnReason={}", ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()), entity, reason);
+                BadMobs.LOG.error("The entity type {} of {} spawned but has not been registered.", ForgeRegistries.ENTITY_TYPES.getKey(entity.getType()), entity);
             }
-
             return true;
         }
-
         else {
-
-            return config.canSpawn(reason);
+            // We pass 'entity.level()' to check the dimension
+            return config.canSpawn(entity.level(), reason);
         }
     }
 }
